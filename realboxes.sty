@@ -1,0 +1,27 @@
+
+\RequirePackage{collectbox}
+\providecommand\adjbox@setdim{\setlength}
+
+\newcommand{\Makebox}{%
+    \@ifnextchar[%
+        \@Makebox
+        \mbox
+}
+
+
+\def\@Makebox[#1]{%
+    \@ifnextchar[%
+        {\@iMakebox[#1]}%
+        {\@iMakebox[#1][c]}%
+}
+
+
+\def\@iMakebox[#1][#2]{%
+    \@collectbox{%
+        \let\@tempboxa\collectedbox
+        \adjbox@setdim\@tempdima{#1}%
+        \hb@xt@\@tempdima{\csname bm@#2\endcsname}%
+    }%
+}
+
+
