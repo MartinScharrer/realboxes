@@ -170,3 +170,22 @@
 }
 
 
+\newcommand*\Colorbox{}%
+\def\Colorbox#1#{%
+    \Color@box{#1}%
+}
+\def\Color@box#1#2{%
+    \@collectbox{\color@box{#1}{#2}\BOXCONTENT}%
+}
+
+\newcommand*\Fcolorbox{}
+\def\Fcolorbox#1#{%
+    \Color@fbox{#1}%
+}
+\def\Color@fbox#1#2#3#{%
+    \Color@@fbox{#1}{#2}{#3}%
+}
+\def\Color@@fbox#1#2#3#4{%
+    \protect\@collectbox{\protect\color@fb@x{#1}{#2}{#3}{#4}\BOXCONTENT}%
+}
+
