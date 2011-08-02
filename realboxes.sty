@@ -11,12 +11,12 @@
 
 \def\@Makebox[#1]{%
     \@ifnextchar[%
-        {\@iMakebox[#1]}%
-        {\@iMakebox[#1][c]}%
+        {\@iMakebox{#1}}%
+        {\@iMakebox{#1}[c]}%
 }
 
 
-\def\@iMakebox[#1][#2]{%
+\def\@iMakebox#1[#2]{%
     \@collectbox{%
         \let\@tempboxa\collectedbox
         \adjbox@setdim\@tempdima{#1}%
@@ -141,5 +141,32 @@
   \collectbox@{\hsize\@tempdima\@parboxrestore}{\@vParbox{#1}{#2}{#3}}{\@@par}%
 }
 
+
+\newcommand*\Sbox[1]{\@collectboxto{#1}{}}
+
+\def\Savebox#1{%
+  \@ifnextchar[%
+    {\@savebox#1}%
+    {\Sbox#1}%
+}
+
+
+\def\@Savebox#1[#2]{%
+  \@ifnextchar [%
+    {\@iSavebox#1{#2}}%
+    {\@iSavebox#1{#2}[c]}%
+}
+
+\def\@iSavebox#1#2[#3]{%
+    \@collectboxto#1{\@iiSavebox{#1}{#2}{#3}}%
+}
+
+\def\@iiSavebox#1#2#3{%
+    \sbox#1{%
+        \let\@tempboxa\collectedbox
+        \adjbox@setdim\@tempdima{#2}%
+        \hb@xt@\@tempdima{\csname bm@#3\endcsname}%
+    }%
+}
 
 
