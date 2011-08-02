@@ -2,7 +2,7 @@
 \RequirePackage{collectbox}
 \providecommand\adjbox@setdim{\setlength}
 
-\newcommand{\Makebox}{%
+\newcommand*{\Makebox}{%
     \@ifnextchar[%
         \@Makebox
         \mbox
@@ -23,5 +23,62 @@
         \hb@xt@\@tempdima{\csname bm@#2\endcsname}%
     }%
 }
+
+
+\newcommand*\Fbox{%
+    \collectbox[\kern\fboxsep]{\let\@tempboxa\collectedbox\@frameb@x\relax}[\kern\fboxsep]%
+}
+
+
+\newcommand*\Mbox{%
+    \leavevmode
+    \@ifnextchar\bgroup
+        \hbox
+        \mbox
+}
+
+
+
+\newcommand*\Raisebox[1]{%
+    \leavevmode
+    \@ifnextchar[%
+        {\@Rsbox{#1}}%
+        {\@collectbox{\@iRsbox{#1}{}}}%
+}
+
+\def\@Rsbox#1[#2]{%
+    \@ifnextchar[%
+        {\@iiRsbox{#1}{#2}}%
+        {\@collectbox{\@iRsbox{#1}{#2}}}%
+}
+
+\def\@iRsbox#1#2{%
+    \adjbox@setdim\@tempdima{#1}%
+    \ifx \\#2\\\else
+        \adjbox@setdim\@tempdimb{#2}%
+    \fi
+    \setbox\collectedbox\hbox{\raise\@tempdima\box\collectedbox}%
+    \ifx \\#2\\\else
+        \ht\collectedbox\@tempdimb
+    \fi
+    \box\collectedbox
+}
+
+\def\@iiRsbox#1#2[#3]{%
+    \@collectbox{\@iiiRsbox{#1}{#2}{#3}}%
+}
+
+\def\@iiiRsbox#1#2#3{%
+    \adjbox@setdim\@tempdima{#1}%
+    \adjbox@setdim\@tempdimb{#2}%
+    \adjbox@setdim\dimen@{#3}%
+    \setbox\collectedbox\hbox{\raise\@tempdima\box\collectedbox}%
+    \ht\collectedbox\@tempdimb
+    \dp\collectedbox\dimen@
+    \box\collectedbox
+}
+
+
+
 
 
