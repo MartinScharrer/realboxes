@@ -189,3 +189,43 @@
     \protect\@collectbox{\protect\color@fb@x{#1}{#2}{#3}{#4}\BOXCONTENT}%
 }
 
+\newcommand*\Rotatebox{%
+    \@ifnextchar[%
+        \Rotatebox@kv
+        \Rotatebox@std
+}
+
+\def\Rotatebox@kv[#1]#2{%
+    \@collectbox{\Grot@box@kv[#1]{#2}\BOXCONTENT}%
+}
+
+\def\Rotatebox@std#1{%
+    \@collectbox{\Grot@box@std{#1}\BOXCONTENT}%
+}
+
+\newcommand*\Scalebox[1]{%
+    \@ifnextchar[%
+        {\Scale@box{#1}}%
+        {\Scale@box{#1}[#1]}%
+}
+
+\def\Scale@box#1[#2]{%
+    \@collectbox{\Gscale@box{#1}[#2]\BOXCONTENT}%
+}
+
+\newcommand*\Reflectbox{%
+    \Scale@box{-1}[1]%
+}
+
+
+\newcommand*\Resizebox{%
+    \@ifstar
+        {\@Resizebox\totalheight}%
+        {\@Resizebox\height}%
+}
+
+\def\@Resizebox#1#2#3{%
+    \@collectbox{\Gscale@@box{#1}{#2}{#3}\BOXCONTENT}%
+}
+
+
