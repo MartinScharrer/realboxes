@@ -113,3 +113,33 @@
 }
 
 
+\newcommand\Parbox{%
+  \@ifnextchar[%
+    \@iParbox
+    {\@iiiParbox c\relax[s]}%
+}
+
+\def\@iParbox[#1]{%
+  \@ifnextchar[%
+    {\@iiParbox{#1}}%
+    {\@iiiParbox{#1}\relax[s]}%
+}
+
+\def\@iiParbox#1[#2]{%
+  \@ifnextchar[%
+    {\@iiiParbox{#1}{#2}}%
+    {\@iiiParbox{#1}{#2}[#1]}%
+}
+
+\def\@iiiParbox#1#2[#3]#4{%
+  \leavevmode
+  \begingroup
+  \@pboxswfalse
+  \setlength\@tempdima{#4}%
+  \let\collect@box\vbox
+  \let\@tempboxa\collectedbox
+  \collectbox@{\hsize\@tempdima\@parboxrestore}{\@vParbox{#1}{#2}{#3}}{\@@par}%
+}
+
+
+
