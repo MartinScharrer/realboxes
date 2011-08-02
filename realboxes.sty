@@ -26,7 +26,7 @@
 
 
 \newcommand*\Fbox{%
-    \collectbox[\kern\fboxsep]{\let\@tempboxa\collectedbox\@frameb@x\relax}[\kern\fboxsep]%
+    \collectbox@{\kern\fboxsep}{\let\@tempboxa\collectedbox\@frameb@x\relax}{\kern\fboxsep}%
 }
 
 
@@ -79,6 +79,9 @@
 }
 
 
-
-
+\newcommand*\Leftline{\nocollectbox@to\linewidth{}{}\hss}
+\newcommand*\Rightline{\nocollectbox@to\linewidth\hss{}{}}
+\newcommand*\Centerline{\nocollectbox@to\linewidth\hss{}\hss}
+\newcommand*\Rlap{\nocollectbox@to\z@{}{}\hss}
+\newcommand*\Llap{\nocollectbox@to\z@\hss{}{}}
 
