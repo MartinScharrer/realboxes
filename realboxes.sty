@@ -85,3 +85,31 @@
 \newcommand*\Rlap{\nocollectbox@to\z@{}{}\hss}
 \newcommand*\Llap{\nocollectbox@to\z@\hss{}{}}
 
+
+\newcommand*\Framebox{%
+    \@ifnextchar[%
+        \@Framebox
+        \Fbox
+}
+
+
+\def\@Framebox[#1]{%
+  \@ifnextchar[%
+    {\@iFramebox{#1}}%
+    {\@iFramebox{#1}[c]}%
+}
+
+
+\def\@iFramebox#1[#2]{%
+    \@collectbox{\@iiFramebox{#1}{#2}}%
+}
+
+\def\@iiFramebox#1#2{%
+    \let\@tempboxa\collectedbox
+    \adjbox@setdim\@tempdima{#1}%
+    \setbox\@tempboxa\hb@xt@\@tempdima
+         {\kern\fboxsep\csname bm@#2\endcsname\kern\fboxsep}%
+    \@frameb@x{\kern-\fboxrule}%
+}
+
+
