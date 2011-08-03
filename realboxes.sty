@@ -1,9 +1,9 @@
 
 \RequirePackage{collectbox}
 
-\newif\ifmoreboxes@fancybox
+\newif\ifrealboxes@fancybox
 
-\DeclareOption{fancybox}{\moreboxes@fancyboxtrue}
+\DeclareOption{fancybox}{\realboxes@fancyboxtrue}
 
 \ProcessOptions\relax
 
@@ -162,7 +162,7 @@
     {\Sbox@#1}%
 }
 
-\ifmoreboxes@fancybox\else
+\ifrealboxes@fancybox\else
     \let\Sbox\Sbox@
 \fi
 
@@ -308,7 +308,7 @@
 
 
 %% fancybox
-\ifmoreboxes@fancybox
+\ifrealboxes@fancybox
 
 \let\orig@fancy@Sbox\Sbox
 
@@ -327,7 +327,7 @@
 \else
 
 \AtBeginDocument{\@ifpackageloaded{fancybox}{%
-    \PackageWarning{moreboxes}{Package 'fancybox' got loaded. This requires 'moreboxes' to be loaded with the 'fancybox' option!}%
+    \PackageWarning{realboxes}{Package 'fancybox' got loaded. This requires 'realboxes' to be loaded with the 'fancybox' option!}%
 }{}%
 
 \fi
