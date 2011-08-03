@@ -1,15 +1,54 @@
+\NeedsTeXFormat{LaTeX2e}[1999/12/01]
+\ProvidesPackage{realboxes}[2011/08/03 v0.1 Change box commands to read there content as real boxes]
 
-\RequirePackage{collectbox}
-
+\newif\ifrealboxes@core
+\newif\ifrealboxes@xcolor
+\newif\ifrealboxes@color
+\newif\ifrealboxes@graphicx
+\newif\ifrealboxes@graphics
+\newif\ifrealboxes@dashbox
 \newif\ifrealboxes@fancybox
 
-\DeclareOption{fancybox}{\realboxes@fancyboxtrue}
+\DeclareOption{all}{%
+    \realboxes@coretrue
+    \realboxes@xcolortrue
+    \realboxes@colortrue
+    \realboxes@graphicxtrue
+    \realboxes@graphicstrue
+    \realboxes@dashboxtrue
+    \realboxes@fancyboxtrue
+}
+
+\DeclareOption*{%
+    \begingroup
+    \expandafter\ifx\csname realboxes@\CurrentOption true\endcsname\relax
+        \endgroup
+        \@unknownoptionerror
+    \else
+        \endgroup
+        \csname realboxes@\CurrentOption true\endcsname
+    \fi
+}
 
 \ProcessOptions\relax
 
+\edef\@tempa{\@ptionlist{\@currname.\@currext}}
+\ifx\@tempa\empty
+    \realboxes@coretrue
+    \@ifpackageloaded{dashbox}{\realboxes@dashboxtrue}{}
+    \@ifpackageloaded{color}{\realboxes@colortrue}{}
+    \@ifpackageloaded{xcolor}{\realboxes@xcolortrue}{}
+    \@ifpackageloaded{graphics}{\realboxes@graphicstrue}{}
+    \@ifpackageloaded{graphicx}{\realboxes@graphicxtrue}{}
+    \@ifpackageloaded{fancybox}{\realboxes@fancyboxtrue}{}
+\fi
+
+\RequirePackage{collectbox}
 \providecommand\adjbox@setdim{\setlength}
 
 % LaTeX core
+
+\ifrealboxes@core
 
 \newcommand*{\Makebox}{%
     \collectboxcheckenv{Makebox}%
@@ -148,7 +187,7 @@
   \leavevmode
   \begingroup
   \@pboxswfalse
-  \setlength\@tempdima{#4}%
+  \adjbox@setdim\@tempdima{#4}%
   \let\collect@box\vbox
   \let\@tempboxa\collectedbox
   \collectbox@{\hsize\@tempdima\@parboxrestore}{\@vParbox{#1}{#2}{#3}}{\@@par}%
@@ -185,8 +224,20 @@
     }%
 }
 
+\fi
+
+
 %%% color
-\RequirePackage{color}
+\ifrealboxes@xcolor
+    \RequirePackage{xcolor}
+    \realboxes@colortrue
+\else
+  \ifrealboxes@color
+    \RequirePackage{color}
+  \fi
+\fi
+
+\ifrealboxes@color
 
 \newcommand*\Colorbox{}%
 \def\Colorbox#1#{%
@@ -209,8 +260,20 @@
     \protect\@collectbox{\protect\color@fb@x{#1}{#2}{#3}{#4}\BOXCONTENT}%
 }
 
-%%% graphicx
-\RequirePackage{graphicx}
+\fi
+
+
+\ifrealboxes@graphicx
+    \RequirePackage{graphicx}
+    \realboxes@graphicstrue
+\else
+  \ifrealboxes@graphics
+    \RequirePackage{graphics}
+  \fi
+\fi
+
+\ifrealboxes@graphics
+
 \newcommand*\Rotatebox{%
     \collectboxcheckenv{Rotatebox}%
     \@ifnextchar[%
@@ -258,9 +321,12 @@
 \def\@Resizebox#1#2#3{%
     \@collectbox{\Gscale@@box{#1}{#2}{#3}\BOXCONTENT}%
 }
+\fi
 
 
 %%% dashbox
+\ifrealboxes@dashbox
+
 \RequirePackage{dashbox}
 
 \newcommand*\Dbox{%
@@ -305,7 +371,7 @@
 \def\@Dlbox[#1]{%
     \@collectbox{\dlbox[#1]{\BOXCONTENT}}%
 }
-
+\fi
 
 %% fancybox
 \ifrealboxes@fancybox
@@ -328,7 +394,7 @@
 
 \AtBeginDocument{\@ifpackageloaded{fancybox}{%
     \PackageWarning{realboxes}{Package 'fancybox' got loaded. This requires 'realboxes' to be loaded with the 'fancybox' option!}%
-}{}%
+}{}}%
 
 \fi
 
