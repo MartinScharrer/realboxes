@@ -3,6 +3,7 @@
 \providecommand\adjbox@setdim{\setlength}
 
 \newcommand*{\Makebox}{%
+    \collectboxcheckenv{Makebox}%
     \@ifnextchar[%
         \@Makebox
         \mbox
@@ -41,6 +42,7 @@
 
 \newcommand*\Raisebox[1]{%
     \leavevmode
+    \collectboxcheckenv{Raisebox}%
     \@ifnextchar[%
         {\@Rsbox{#1}}%
         {\@collectbox{\@iRsbox{#1}{}}}%
@@ -87,6 +89,7 @@
 
 
 \newcommand*\Framebox{%
+    \collectboxcheckenv{Framebox}%
     \@ifnextchar[%
         \@Framebox
         \Fbox
@@ -114,6 +117,7 @@
 
 
 \newcommand\Parbox{%
+  \collectboxcheckenv{Parbox}%
   \@ifnextchar[%
     \@iParbox
     {\@iiiParbox c\relax[s]}%
@@ -172,6 +176,7 @@
 
 \newcommand*\Colorbox{}%
 \def\Colorbox#1#{%
+    \collectboxcheckenv{Colorbox}%
     \Color@box{#1}%
 }
 \def\Color@box#1#2{%
@@ -180,6 +185,7 @@
 
 \newcommand*\Fcolorbox{}
 \def\Fcolorbox#1#{%
+    \collectboxcheckenv{Fcolorbox}%
     \Color@fbox{#1}%
 }
 \def\Color@fbox#1#2#3#{%
@@ -190,6 +196,7 @@
 }
 
 \newcommand*\Rotatebox{%
+    \collectboxcheckenv{Rotatebox}%
     \@ifnextchar[%
         \Rotatebox@kv
         \Rotatebox@std
@@ -204,6 +211,7 @@
 }
 
 \newcommand*\Scalebox[1]{%
+    \collectboxcheckenv{Scalebox}%
     \@ifnextchar[%
         {\Scale@box{#1}}%
         {\Scale@box{#1}[#1]}%
@@ -214,14 +222,21 @@
 }
 
 \newcommand*\Reflectbox{%
+    \collectboxcheckenv{Reflectbox}%
     \Scale@box{-1}[1]%
 }
 
 
 \newcommand*\Resizebox{%
+    \collectboxcheckenv{Resizebox}%
     \@ifstar
         {\@Resizebox\totalheight}%
         {\@Resizebox\height}%
+}
+
+\@namedef{Resizebox*}{%
+    \collectboxcheckenv{Resizebox*}%
+    \@Resizebox\totalheight
 }
 
 \def\@Resizebox#1#2#3{%
