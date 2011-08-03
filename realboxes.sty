@@ -1,7 +1,13 @@
 
 \RequirePackage{collectbox}
-\providecommand\adjbox@setdim{\setlength}
 
+\newif\ifmoreboxes@fancybox
+
+\DeclareOption{fancybox}{\moreboxes@fancyboxtrue}
+
+\ProcessOptions\relax
+
+\providecommand\adjbox@setdim{\setlength}
 
 % LaTeX core
 
@@ -148,14 +154,17 @@
   \collectbox@{\hsize\@tempdima\@parboxrestore}{\@vParbox{#1}{#2}{#3}}{\@@par}%
 }
 
-
-\newcommand*\Sbox[1]{\@collectboxto{#1}{}}
+\newcommand*\Sbox@[1]{\@collectboxto{#1}{}}
 
 \def\Savebox#1{%
   \@ifnextchar[%
     {\@savebox#1}%
-    {\Sbox#1}%
+    {\Sbox@#1}%
 }
+
+\ifmoreboxes@fancybox\else
+    \let\Sbox\Sbox@
+\fi
 
 
 \def\@Savebox#1[#2]{%
@@ -298,5 +307,29 @@
 }
 
 
+%% fancybox
+\ifmoreboxes@fancybox
+
+\let\orig@fancy@Sbox\Sbox
+
+\def\Sbox{%
+    \begingroup
+    \def\@tempa{Sbox}%
+    \expandafter\endgroup
+    \ifx\@currenvir\@tempa
+        \orig@fancy@Sbox
+        \edef\@currenvir{\@currenvir\space}%
+    \else
+        \expandafter\Sbox@
+    \fi
+}
+
+\else
+
+\AtBeginDocument{\@ifpackageloaded{fancybox}{%
+    \PackageWarning{moreboxes}{Package 'fancybox' got loaded. This requires 'moreboxes' to be loaded with the 'fancybox' option!}%
+}{}%
+
+\fi
 
 
