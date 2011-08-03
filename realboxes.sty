@@ -2,6 +2,9 @@
 \RequirePackage{collectbox}
 \providecommand\adjbox@setdim{\setlength}
 
+
+% LaTeX core
+
 \newcommand*{\Makebox}{%
     \collectboxcheckenv{Makebox}%
     \@ifnextchar[%
@@ -173,6 +176,8 @@
     }%
 }
 
+%%% color
+\RequirePackage{color}
 
 \newcommand*\Colorbox{}%
 \def\Colorbox#1#{%
@@ -195,6 +200,8 @@
     \protect\@collectbox{\protect\color@fb@x{#1}{#2}{#3}{#4}\BOXCONTENT}%
 }
 
+%%% graphicx
+\RequirePackage{graphicx}
 \newcommand*\Rotatebox{%
     \collectboxcheckenv{Rotatebox}%
     \@ifnextchar[%
@@ -242,5 +249,54 @@
 \def\@Resizebox#1#2#3{%
     \@collectbox{\Gscale@@box{#1}{#2}{#3}\BOXCONTENT}%
 }
+
+
+%%% dashbox
+\RequirePackage{dashbox}
+
+\newcommand*\Dbox{%
+    \@collectbox{\dbox{\BOXCONTENT}}%
+}
+
+
+\newcommand*\Dashbox{%
+    \@ifnextchar[%
+        \@Dashbox
+        \Dbox
+}
+
+\def\@Dashbox[#1]{%
+    \@ifnextchar[%
+        {\@iDashbox{#1}}%
+        {\@iDashbox{#1}[c]}%
+}
+
+\def\@iDashbox#1[#2]{%
+    \@collectbox{\dashbox[#1][#2]{\BOXCONTENT}}%
+}
+
+
+\newcommand*\Lbox{%
+    \@ifnextchar[%
+        \@Lbox
+        {\@collectbox{\lbox{\BOXCONTENT}}}%
+}
+
+\def\@Lbox[#1]{%
+    \@collectbox{\lbox[#1]{\BOXCONTENT}}%
+}
+
+
+\newcommand*\Dlbox{%
+    \@ifnextchar[%
+        \@Dlbox
+        {\@collectbox*\dlbox}%
+}
+
+\def\@Dlbox[#1]{%
+    \@collectbox{\dlbox[#1]{\BOXCONTENT}}%
+}
+
+
 
 
