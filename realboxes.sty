@@ -33,9 +33,6 @@
 %
 %    \begin{macrocode}
 \edef\@tempa{\@ptionlist{\@currname.\@currext}}
-%    \end{macrocode}
-%
-%    \begin{macrocode}
 \ifx\@tempa\empty
     \realboxes@coretrue
     \@ifpackageloaded{dashbox}{\realboxes@dashboxtrue}{}
@@ -45,6 +42,15 @@
     \@ifpackageloaded{graphicx}{\realboxes@graphicxtrue}{}
     \@ifpackageloaded{fancybox}{\realboxes@fancyboxtrue}{}
 \fi
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\ifrealboxes@fancybox
+    \realboxes@coretrue
+\fi
+%    \end{macrocode}
+%
+%    \begin{macrocode}
 \RequirePackage{collectbox}
 %    \end{macrocode}
 %
@@ -353,6 +359,7 @@
 %
 %    \begin{macrocode}
 \ifrealboxes@fancybox
+\RequirePackage{fancybox}
 \let\orig@fancy@Sbox\Sbox
 %    \end{macrocode}
 %
