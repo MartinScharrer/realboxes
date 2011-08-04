@@ -308,6 +308,30 @@
 % \end{macro}
 %
 %
+% \begin{macro}{\@vParbox}
+%    \begin{macrocode}
+\def\@vParbox#1#2#3{%
+    \ifx\relax#2\else
+      \setlength\@tempdimb{#2}%
+      \edef\@parboxto{to\the\@tempdimb}%
+    \fi
+    \if#1b\vbox
+    %\else\if #1B\vbox
+    \else\if #1t\vtop
+    %\else\if #1T\vtop
+    \else\ifmmode\vcenter
+    \else\@pboxswtrue $\vcenter
+    \fi\fi\fi
+    %\fi\fi
+    \@parboxto{\let\hss\vss\let\unhbox\unvbox
+       \csname bm@#3\endcsname}%
+    \if@pboxsw \m@th$\fi
+  \endgroup
+}
+%    \end{macrocode}
+% \end{macro}
+%
+%
 % \begin{macro}{\Sbox@}
 %    \begin{macrocode}
 \newcommand*\Sbox@[1]{\@collectboxto{#1}{}}
