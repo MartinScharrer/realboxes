@@ -55,7 +55,12 @@
 %    \end{macrocode}
 %
 %    \begin{macrocode}
-\providecommand\adjbox@setdim{\setlength}
+\IfFileExists{adjcalc.sty}{%
+    \RequirePackage{adjcalc}
+}{%
+    \PackageWarning{realboxes}{Package 'adjcalc' (from the 'adjustbox' bundle) not found. Advance lengths expressions might not be supported!}
+    \let\adjsetlength\setlength
+}
 %    \end{macrocode}
 %
 % \subsection{\LaTeX\ core}
@@ -91,7 +96,7 @@
 \def\@iMakebox#1[#2]{%
     \@collectbox{%
         \let\@tempboxa\collectedbox
-        \adjbox@setdim\@tempdima{#1}%
+        \adjsetlength\@tempdima{#1}%
         \hb@xt@\@tempdima{\csname bm@#2\endcsname}%
     }%
 }
@@ -147,9 +152,9 @@
 % \begin{macro}{\@iRsbox}
 %    \begin{macrocode}
 \def\@iRsbox#1#2{%
-    \adjbox@setdim\@tempdima{#1}%
+    \adjsetlength\@tempdima{#1}%
     \ifx \\#2\\\else
-        \adjbox@setdim\@tempdimb{#2}%
+        \adjsetlength\@tempdimb{#2}%
     \fi
     \setbox\collectedbox\hbox{\raise\@tempdima\box\collectedbox}%
     \ifx \\#2\\\else
@@ -173,9 +178,9 @@
 % \begin{macro}{\@iiiRsbox}
 %    \begin{macrocode}
 \def\@iiiRsbox#1#2#3{%
-    \adjbox@setdim\@tempdima{#1}%
-    \adjbox@setdim\@tempdimb{#2}%
-    \adjbox@setdim\dimen@{#3}%
+    \adjsetlength\@tempdima{#1}%
+    \adjsetlength\@tempdimb{#2}%
+    \adjsetlength\dimen@{#3}%
     \setbox\collectedbox\hbox{\raise\@tempdima\box\collectedbox}%
     \ht\collectedbox\@tempdimb
     \dp\collectedbox\dimen@
@@ -256,7 +261,7 @@
 %    \begin{macrocode}
 \def\@iiFramebox#1#2{%
     \let\@tempboxa\collectedbox
-    \adjbox@setdim\@tempdima{#1}%
+    \adjsetlength\@tempdima{#1}%
     \setbox\@tempboxa\hb@xt@\@tempdima
          {\kern\fboxsep\csname bm@#2\endcsname\kern\fboxsep}%
     \@frameb@x{\kern-\fboxrule}%
@@ -305,7 +310,7 @@
   \leavevmode
   \begingroup
   \@pboxswfalse
-  \adjbox@setdim\@tempdima{#4}%
+  \adjsetlength\@tempdima{#4}%
   \let\collect@box\vbox
   \let\@tempboxa\collectedbox
   \collectbox@{\hsize\@tempdima\@parboxrestore}{\@vParbox{#1}{#2}{#3}}{\@@par}%
@@ -318,7 +323,7 @@
 %    \begin{macrocode}
 \def\@vParbox#1#2#3{%
     \ifx\relax#2\else
-      \setlength\@tempdimb{#2}%
+      \adjsetlength\@tempdimb{#2}%
       \edef\@parboxto{to\the\@tempdimb}%
     \fi
     \if#1b\vbox
@@ -413,7 +418,7 @@
 \def\@iiSavebox#1#2#3{%
     \sbox#1{%
         \let\@tempboxa\collectedbox
-        \adjbox@setdim\@tempdima{#2}%
+        \adjsetlength\@tempdima{#2}%
         \hb@xt@\@tempdima{\csname bm@#3\endcsname}%
     }%
 }
@@ -590,19 +595,16 @@
 % \begin{macro}{\Resizebox}
 %    \begin{macrocode}
 \@namedef{Resizebox*}{%
-%    \end{macrocode}
-% \end{macro}
-%
-%    \begin{macrocode}
     \collectboxcheckenv{Resizebox*}%
     \@Resizebox\totalheight
 }
 %    \end{macrocode}
+% \end{macro}
 %
 % \begin{macro}{\@Resizebox}
 %    \begin{macrocode}
 \def\@Resizebox#1#2#3{%
-    \@collectbox{\Gscale@@box{#1}{#2}{#3}\BOXCONTENT}%
+    \@collectbox{\let\setlength\adjsetlength\Gscale@@box{#1}{#2}{#3}\BOXCONTENT}%
 }
 %    \end{macrocode}
 % \end{macro}
