@@ -24,7 +24,7 @@
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
 \ProvidesFile{realboxes.dtx}
     [2011/08/04 v0.1 DTX file]
-\documentclass{ltxdoc}
+\documentclass{ydoc}
 \usepackage{realboxes}[2011/08/04]
 \EnableCrossrefs
 \CodelineIndex
@@ -37,7 +37,7 @@
 %</driver>
 % \fi
 %
-% \CheckSum{535}
+% \CheckSum{541}
 %
 % \CharacterTable
 %  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
@@ -56,27 +56,46 @@
 %   Right brace   \}     Tilde         \~}
 %
 %
-% \changes{<+version+>}{<+date+>}{Converted to DTX file}
+% \changes{v0.1}{2011/08/04}{First release.}
 %
 % \DoNotIndex{\newcommand,\newenvironment}
 %
 % \providecommand*{\url}{\texttt}
 % \GetFileInfo{realboxes.dtx}
 % \title{The \textsf{realboxes} package}
-% \author{<+author+> \\ \url{<+email+>}}
+% \author{Martin Scharrer \\ \url{martin@scharrer-online.de}}
 % \date{\fileversion~from \filedate}
 %
 % \maketitle
+% \begin{abstract}
+% Provides variants of common ``box''-macros which reads their content as real box and not as macro argument.
+% \end{abstract}
 %
 % \section{Introduction}
+% The \LaTeX\ core and several packages like \pkg{graphics/x} provide
+% some \cs{<xxx>box} macros which modify their content by first placing it into a box.
+% However, these macros still read their content as a macro argument and therefore
+% do no support verbatim content. This package provides variants of these macros
+% which use the authors other package \pkg{collectbox} to collect the content
+% as real box before it is modified (framed, raised, scaled, rotated, etc.).
+% This allows for verbatim and other special content.
 %
-% Put text here.
+% The provided macros simply have the same names as the original versions but
+% start with an upper-case letter instead.
+% The ``long-form'' macros, like \Macro\Makebox, can also be used as environments, but
+% not the ``short-form'' macros, like \Macro\Mbox. However, normally the long form uses
+% the short form anyway when no optional arguments are used.
+%
 %
 % \section{Usage}
+% The following macros are provided dependent on the used package options.
+% The options state other packages which are loaded and variants of their box macros are provided.
+% See the package manual for more details about these macros.
+% If loaded without any options the \opt{core} macros are loaded as well as all
+% variant of macros for all already loaded packages (``auto-detection mode'').
 %
-% Put text here.
 %
-%
+% \subsection{\LaTeX\ code macros (option \opt{core})}
 % \DescribeMacro{\Makebox}[<width>][<position>]{<content>}
 %
 %
@@ -116,13 +135,13 @@
 % \DescribeMacro{\Sbox}{<box register>}{<content>}
 %
 %
-% \subsubsection{Color macros}
+% \subsection{Color macros (option \opt{color} or \opt{xcolor})}
 % \DescribeMacro{\Colorbox}[<model>]{<color>}{<content>}
 %
 % \DescribeMacro{\Fcolorbox}[<frame model>]{<frame color>}[<bg model>]{<bg color>}{<content>}
 %
 %
-% \subsubsection{Graphic macros}
+% \subsection{Graphic macros (option \opt{graphics} or \opt{graphicx})}
 % \DescribeMacro{\Rotatebox}[<options>]{<angle>}{<content>}
 %
 %
@@ -136,8 +155,7 @@
 %
 %
 %
-%
-% \subsubsection{dashbox}
+% \subsection{Macros of the \pkg{dashbox} package (option \opt{dashbox})}
 %
 % \DescribeMacro{\Dbox}{<content>}
 %
@@ -150,6 +168,11 @@
 %
 % \DescribeMacro{\Dlbox}[<layers>]{<content>}
 %
+%
+% \subsection{Compatibility with the \pkg{fancybox} package (option \opt{fancybox})}
+% The \pkg{fancybox} package defines its macros already in a verbatim compatible way.
+% However, if this option is used the \Macro\Sbox macro provided by the \opt{core} option is defined in a way to not 
+% collide with the \opt{Sbox} environment of this package.
 %
 % \StopEventually{}
 %

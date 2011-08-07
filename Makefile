@@ -57,15 +57,17 @@ ${INSTALLDIR}:
 ${DOCINSTALLDIR}:
 	mkdir -p $@
 
+.PHONY: build
+
 build: realboxes.dtx realboxes.ins README
 	rm -rf build/
 	mkdir build
-	perl dtx.pl realboxes.dtx build/realboxes.dtx
+	perl ../dtx/dtx.pl realboxes.dtx build/realboxes.dtx
 	${CP} realboxes.ins README build/
 	cd build && yes | tex realboxes.ins
 	cd build && latexmk -pdf realboxes.dtx
 	cd build && pdfopt realboxes.pdf opt.pdf && mv opt.pdf realboxes.pdf
-	cd build && ctanify realboxes.dtx realboxes.ins README
+	cd build && ctanify realboxes.dtx realboxes.ins realboxes.sty README
 	cd build && ${CP} realboxes.tar.gz /tmp
 
 
