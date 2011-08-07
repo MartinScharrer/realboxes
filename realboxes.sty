@@ -58,8 +58,8 @@
 \IfFileExists{adjcalc.sty}{%
     \RequirePackage{adjcalc}
 }{%
-    \PackageWarning{realboxes}{Package 'adjcalc' (from the 'adjustbox' bundle) not found. Advance lengths expressions might not be supported!}
-    \let\adjsetlength\setlength
+    \RequirePackage{calc}
+    \def\adjsetlength{\setlength}
 }
 %    \end{macrocode}
 %

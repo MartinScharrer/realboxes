@@ -37,7 +37,7 @@
 %</driver>
 % \fi
 %
-% \CheckSum{541}
+% \CheckSum{546}
 %
 % \CharacterTable
 %  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
@@ -86,6 +86,19 @@
 % The ``long-form'' macros, like \Macro\Makebox, can also be used as environments, but
 % not the ``short-form'' macros, like \Macro\Mbox. However, normally the long form uses
 % the short form anyway when no optional arguments are used.
+%
+% \subsection*{Length values}
+% Some of the macros await length values to specify a dimension of the content.
+% For all macros the lengths \Macro\width, \Macro\height, \Macro\depth and \Macro\totalheight\relax
+% (= height + depth) can be used to refer to the original dimensions of the content.
+% Also the \pkg{adjcalc} package from the \pkg{adjustbox} bundle is used to allow for
+% mathematical expressions for these values. By default the $\epsilon$-\TeX\ primitive
+% \Macro\dimexpr is used which allows for |+|, |-|, |*| and |/| as well as grouping using |( )|.
+% If either $\epsilon$-\TeX\ or the \pkg{adjcalc} package is not available, than the \pkg{calc}
+% package is used by default. It is also possible to use the \pkg{pgfmath} framework of the 
+% \pkg{pgf} bundle.  To select a different math back-end simply load the \pkg{adjcalc} package
+% with one of the three options |etex|, |calc| or |pgfmath| before the \pkg{realboxes} package.
+% See the \pkg{adjustbox} manual for more information about \pkg{adjcalc}.
 %
 %
 % \section{Usage}
