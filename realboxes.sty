@@ -113,6 +113,15 @@
 % \end{macro}
 %
 %
+% \begin{macro}{\Frame}
+%    \begin{macrocode}
+\newcommand*\Frame{%
+    \@collectbox{\frame\BOXCONTENT}%
+}
+%    \end{macrocode}
+% \end{macro}
+%
+%
 % \begin{macro}{\Mbox}
 %    \begin{macrocode}
 \newcommand*\Mbox{%
@@ -595,7 +604,7 @@
 % \begin{macro}{\Resizebox}
 %    \begin{macrocode}
 \@namedef{Resizebox*}{%
-    \collectboxcheckenv{Resizebox*}%
+    \@collectboxisenv{Resizebox*}%
     \@Resizebox\totalheight
 }
 %    \end{macrocode}
