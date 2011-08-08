@@ -363,7 +363,7 @@
 %    \begin{macrocode}
 \def\Savebox#1{%
   \@ifnextchar[%
-    {\@savebox#1}%
+    {\@Savebox#1}%
     {\Sbox@#1}%
 }
 %    \end{macrocode}
@@ -426,7 +426,7 @@
 %    \begin{macrocode}
 \def\@iiSavebox#1#2#3{%
     \sbox#1{%
-        \let\@tempboxa\collectedbox
+        \let\@tempboxa#1%
         \adjsetlength\@tempdima{#2}%
         \hb@xt@\@tempdima{\csname bm@#3\endcsname}%
     }%
