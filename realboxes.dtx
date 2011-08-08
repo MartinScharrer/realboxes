@@ -25,10 +25,12 @@
 \ProvidesFile{realboxes.dtx}
     [2011/08/04 v0.1 DTX file]
 \documentclass{ydoc}
+\usepackage{dashbox}
 \usepackage{realboxes}[2011/08/04]
 \EnableCrossrefs
 \CodelineIndex
 \RecordChanges
+\optionaloff
 \begin{document}
   \DocInput{realboxes.dtx}
   \PrintChanges
@@ -37,7 +39,7 @@
 %</driver>
 % \fi
 %
-% \CheckSum{546}
+% \CheckSum{545}
 %
 % \CharacterTable
 %  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
@@ -57,6 +59,7 @@
 %
 %
 % \changes{v0.1}{2011/08/04}{First release.}
+% \changes{v0.2}{2011/08/08}{Fixed \cs{Savebox}. Added much more documentation.}
 %
 % \DoNotIndex{\newcommand,\newenvironment}
 %
@@ -110,77 +113,155 @@
 %
 %
 % \subsection{\LaTeX\ code macros (option \opt{core})}
+%
+% \DescribeMacro{\Mbox}{<content>}
+% This variant of \Macro\mbox is the only macro which doesn't use \Macro\collectbox
+% because of the simplicity of the original macro. \Macro\Mbox will use \Macro\hbox
+% directly to process the \marg{content} (and will expand it to search for the opening brace).
+% The special case when \marg{content} is a single token is handling by using \Macro\mbox instead.
+%
+%
 % \DescribeMacro{\Makebox}[<width>][<position>]{<content>}
+% Places the \meta{content} in a box of width \meta{width} (by default the native width) and horizontally aligns it
+% accordantly to \meta{position}. Valid values are |l| for left, |r| for right and |c| for center alignment (default).
+% If no optional arguments are used this macro equals to \Macro\Mbox.
 %
 %
 % \DescribeMacro{\Fbox}{<content>}
-%
-%
-% \DescribeMacro{\Mbox}{<content>}
-%
-%
-% \DescribeMacro{\Raisebox}{<length>}[<height>][<depth>]{<content>}
-%
-%
-% \DescribeMacro{\Leftline}{<content>}
-%
-%
-% \DescribeMacro{\Rightline}{<content>}
-%
-%
-% \DescribeMacro{\Centerline}{<content>}
-%
-%
-% \DescribeMacro{\Rlap}{<content>}
-%
-%
-% \DescribeMacro{\Llap}{<content>}
+% Draws a frame around \meta{content} with a line width of \Macro\fboxrule and a separation of \Macro\fboxsep.
+% The baseline of the content is not affected.
 %
 %
 % \DescribeMacro{\Framebox}[<width>][<position>]{<content>}
+% Like \Macro\Makebox but draws a frame like \Macro\Fbox.
+% If no optional arguments are used this macro equals to \Macro\Fbox.
+%
+% \DescribeMacro{\Frame}{<content>}
+% Similar to \Macro\Fbox but does draw the frame tightly around its content with no separation. The resulting box will also have no depth, i.e.
+% might be moved up. Note that the original \Macro\frame macro is indented for use inside a \env{picture} environment but can also be used in
+% normal text. The line width is the current \env{picture} line width (|\@wholewidth|) which can be (globally) set 
+% using \Macro\linethickness{<length>} (also in normal text mode). 
+%
+%
+%
+%
+% \DescribeMacro{\Raisebox}{<length>}[<height>][<depth>]{<content>}
+% Raises the \meta{content} by \meta{length}. Negative values lower the content.
+% In addition to this the official height and depth can be set. This does not scale the content,
+% but only make \TeX\ reserve less vertical space.
+%
+%
+% \DescribeMacro{\Centerline}{<content>}
+% Places \meta{content} into a box of width \Macro\linewidth and centers it inside this box (even if the content is wider).
+% This is similar to \Macro\Makebox[\AlsoMacro\linewidth][c]{<content>}.
+%
+%
+% \DescribeMacro{\Leftline}{<content>}
+% Places \meta{content} into a box of width \Macro\linewidth and left aligns it inside this box.
+% If the content is wider it will stick out on the right site.
+% This is similar to \Macro\Makebox[\AlsoMacro\linewidth][l]{<content>}.
+%
+%
+% \DescribeMacro{\Rightline}{<content>}
+% Places \meta{content} into a box of width \Macro\linewidth and right aligns it inside this box.
+% If the content is wider it will stick out on the left site.
+% This is similar to \Macro\Makebox[\AlsoMacro\linewidth][r]{<content>}.
+%
+%
+% \DescribeMacro{\Rlap}{<content>}
+% Places \meta{content} into a box of zero width so that it laps over to the right site. The following material to the right will be printed
+% on top of it.
+% This is similar to \Macro\Makebox['0pt'][l]{<content>}.
+%
+% \DescribeMacro{\Llap}{<content>}
+% Places \meta{content} into a box of zero width so that it laps over to the left site. The content will be printed on top of the
+% previous material on the left.
+% This is similar to \Macro\Makebox['0pt'][l]{<content>}.
 %
 %
 % \DescribeMacro{\Parbox}[<pos>][<height>][<inner-pos>]{<width>}{<content>}
+% Places the \meta{content} into a paragraph box of the given \meta{width}.
+% The optional \meta{pos} argument can be used to select the vertical alignment of the box towards the surrounding:
+% `|t|' align box to the top baseline, `|b|' align to the bottom
+% baseline or `|c|' vertically center the content.
+% In addition to this the \meta{height} and the \meta{inner pos}ition can be set as further optional arguments.
+% Valid values for \meta{inner-pos} are: `|t|' flush content to the top, `|b|' flush content to the bottom,
+% `|c|' center the content inside the box or `|s|' to stretch the material vertically across the box. This only works if the content contains
+% something vertically stretchable.
+%
+% This macro uses also \pkg{collectbox} but redefines an internal macro to collect a vertical box instead of the usual horizontal one.
 %
 %
-% \DescribeMacro{\Savebox}{<box register>}[<width>][<position>]{<content>}
+% \DescribeMacro{\Sbox}{<\textbackslash boxregister>}{<content>}
+% This saves the \meta{content} into the given \meta{\textbackslash boxregister}, which must be first allocated
+% using \Macro\newsavebox{<\textbackslash boxregister>}.
 %
+% \DescribeMacro{\Savebox}{<\textbackslash boxregister>}[<width>][<position>]{<content>}
+% Sets the \meta{content} in a box of the given width and alignment like \Macro\Makebox and stores it in \meta{\textbackslash boxregister}.
+% If no optional arguments are used this macro equals to \Macro\Sbox.
 %
-% \DescribeMacro{\Sbox}{<box register>}{<content>}
-%
-%
+% \Needspace*{10\baselineskip}
 % \subsection{Color macros (option \opt{color} or \opt{xcolor})}
-% \DescribeMacro{\Colorbox}[<model>]{<color>}{<content>}
+% \DescribeMacro{\Colorbox}[<color model>]{<color>}{<content>}
+% Sets the \meta{content} into a box with the given background \meta{color}. If required the \meta{color model} can be specified.
 %
-% \DescribeMacro{\Fcolorbox}[<frame model>]{<frame color>}[<bg model>]{<bg color>}{<content>}
+% \DescribeMacro{\Fcolorbox}[<fc model>]{<frame color>}[<bg model>]{<background color>}{<content>}
+% Sets the \meta{content} into a box with the given \meta{background color} and draws a frame around it like \Macro\Fbox but with
+% a given \meta{frame color}.
+% If required the color \meta{model} can be specified. If only the frame color model is specified it will also be used for the background color.
 %
 %
+% \Needspace*{6\baselineskip}
 % \subsection{Graphic macros (option \opt{graphics} or \opt{graphicx})}
 % \DescribeMacro{\Rotatebox}[<options>]{<angle>}{<content>}
+% Rotates the \meta{content} by \meta{angle} which is be default in degrees anti-clockwise (360 = full circle).
+% As \meta{options} the following keys can be used:
+% \begin{description}\def\oitem#1#2{\item[{\normalfont\ttfamily \MacroArgs'#1='<#2>\relax}]}%
+%  \oitem{x}{dimen}
+%  \oitem{y}{dimen}  Allows to specify the X and Y coordinate of the coordinate of the center of rotation relative to the reference point
+%                    of the box.
+%  \oitem{origin}{label} Allows to specify the center of the rotation using the following letters which can be combined: `|l|' left side,
+%       `|r|' right side, `|c|' center of the box, `|t|' top of the box, `|b|' bottom of the box and `|B|' for the base line.
+%       For example `|tr|' rotates about the top right corner.
+%  \oitem{units}{number} allows to change the default units of degrees anti-clockwise (|360|) to any \meta{number} of units in one full
+%       anti-clockwise rotation. For example |-360| specifies degrees clockwise and |6.283185| specifies radians.
+% \end{description}
 %
 %
-% \DescribeMacro{\Scalebox}{<h-scale>}{<v-scale>}{<content>}
+% \DescribeMacro{\Scalebox}{<h-scale>}[<v-scale>]{<content>}
+% Scales the \meta{content} by the given \meta{scale} factor. The vertical scaling can be specified independently using the optional argument.
 %
 %
 % \DescribeMacro{\Reflectbox}{<content>}
+% This reflects the \meta{content} and is equal to \Macro\Scalebox{-1}{1}{<content>}.
 %
 %
-% \DescribeMacro{\Resizebox}*{<width>}{<height>}{<content>}
+% \DescribeMacro{\Resizebox}{<width>}{<height>}{<content>}
+% Resizes the \meta{content} to the given \meta{width} and/or \meta{height}.
+% The special value `|!|' can be used for one of the two values to scale it accordantly to the other value.
+% \Macro\Resizebox{'!'}{'!'}{<content>} will not change the size of the content.
+% If both values are used the aspect ratio might be changed. This can be avoided (for the local \TeX\ group) using
+% \Macro\setkeys{Gin}{keepaspectratio}. Then the content is scaled to the smaller of the two values.
 %
+% \DescribeMacro{\Resizebox}'*'{<width>}{<totalheight>}{<content>}
+% Like \Macro\Resizebox but scales the total height (= height + depth) instead of the height.
 %
 %
 % \subsection{Macros of the \pkg{dashbox} package (option \opt{dashbox})}
 %
 % \DescribeMacro{\Dbox}{<content>}
-%
+% Like \Macro\Fbox but uses a dashed line instead.
 %
 % \DescribeMacro{\Dashbox}[<width>][<position>]{<content>}
-%
+% Like \Macro\Framebox but uses a dashed line instead.
 %
 % \DescribeMacro{\Lbox}[<layers>]{<content>}
-%
+% Draws some solid background layers to the lower right of the content which produces a shadow effect.
+% The \meta{content} is supposed to also use \Macro\Dbox or \Macro\Fbox to draw the foreground dash or frame box.
+% By default two layers are drawn but this can be changed by the optional argument.
 %
 % \DescribeMacro{\Dlbox}[<layers>]{<content>}
+% Like \Macro\Lbox but draws the layers with dashed lines instead.
 %
 %
 % \subsection{Compatibility with the \pkg{fancybox} package (option \opt{fancybox})}
@@ -190,6 +271,7 @@
 %
 % \StopEventually{}
 %
+% \clearpage
 % \section{Implementation}
 %
 % \iffalse
