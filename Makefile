@@ -67,7 +67,15 @@ build: realboxes.dtx realboxes.ins README
 	cd build && yes | tex realboxes.ins
 	cd build && latexmk -pdf realboxes.dtx
 	cd build && pdfopt realboxes.pdf opt.pdf && mv opt.pdf realboxes.pdf
-	cd build && ctanify realboxes.dtx realboxes.ins realboxes.sty README
+	cd build && ctanify realboxes.dtx realboxes.ins realboxes.sty README realboxes.pdf
 	cd build && ${CP} realboxes.tar.gz /tmp
 
+
+###########################
+# CTAN Upload
+CTANUPLOAD=http://dante.ctan.org/upload.html
+BROWSER=firefox
+
+upload:
+	${BROWSER} ${CTANUPLOAD} &
 
