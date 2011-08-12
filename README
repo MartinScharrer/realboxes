@@ -18,16 +18,17 @@ The following macros (taken from the shown packages) are provided:
 
 ## LaTeX core (option 'core') ##
 
+    \Mbox{<content>}
     \Makebox[<width>][<position>]{<content>}
     \Fbox{<content>}
-    \Mbox{<content>}
+    \Framebox[<width>][<position>]{<content>}
+    \Frame{<content>}
     \Raisebox{<length>}[<height>][<depth>]{<content>}
     \Leftline{<content>}
     \Rightline{<content>}
     \Centerline{<content>}
     \Rlap{<content>}
     \Llap{<content>}
-    \Framebox[<width>][<position>]{<content>}
     \Parbox[<pos>][<height>][<inner-pos>]{<width>}{<content>}
     \Savebox{<box register>}[<width>][<position>]{<content>}
     \Sbox{<box register>}{<content>}
