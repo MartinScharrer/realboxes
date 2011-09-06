@@ -1,81 +1,75 @@
-TEXMF=${HOME}/texmf
-INSTALLDIR=${TEXMF}/tex/latex/realboxes
-DOCINSTALLDIR=${TEXMF}/doc/latex/realboxes
-CP=cp
-RMDIR=rm -rf
-PDFLATEX=pdflatex -interaction=batchmode
-LATEXMK=latexmk -pdf -silent
+CONTRIBUTION  = realboxes
+NAME          = Martin Scharrer
+EMAIL         = martin@scharrer-online.de
+DIRECTORY     = /macros/latex/contrib/${CONTRIBUTION}
+LICENSE       = free
+FREEVERSION   = lppl
+FILE          = ${CONTRIBUTION}.tar.gz
+export CONTRIBUTION VERSION NAME EMAIL SUMMARY DIRECTORY DONOTANNOUNCE ANNOUNCE NOTES LICENSE FREEVERSION FILE
 
-PACKEDFILES=realboxes.sty
-DOCFILES=realboxes.pdf 
-#realboxes-de.pdf
-SRCFILES=realboxes.dtx realboxes.ins README Makefile
 
-all: unpack doc
+SRCFILES = ${CONTRIBUTION}.sty
+DOCFILES = ${CONTRIBUTION}.pdf README
 
-package: unpack
-class: unpack
+TEXMF = ${HOME}/texmf
 
-${PACKEDFILES}: realboxes.dtx realboxes.ins
-	yes | pdflatex realboxes.ins
+LATEXMK = latexmk -pdf
 
-unpack: ${PACKEDFILES}
+.PHONY: all upload doc clean install uninstall build
 
-doc: ${DOCFILES}
+all: doc
 
-pdfopt: doc
-	@-pdfopt realboxes.pdf .temp.pdf && mv .temp.pdf realboxes.pdf
-	@-pdfopt realboxes-de.pdf .temp.pdf && mv .temp.pdf realboxes-de.pdf
+${FILE}: ${CONTRIBUTION}.dtx ${CONTRIBUTION}.ins ${CONTRIBUTION}.sty README ${CONTRIBUTION}.pdf
+	${MAKE} --no-print-directory build
 
-realboxes.pdf: realboxes.dtx
-	${LATEXMK} $<
+upload: ${FILE}
+	ctanupload -p
 
-realboxes-de.pdf: realboxes-de.tex realboxes.dtx
-	${LATEXMK} $<
+doc: ${CONTRIBUTION}.pdf
 
-realboxes.tex: unpack
+${CONTRIBUTION}.pdf: ${CONTRIBUTION}.dtx ${CONTRIBUTION}.sty ${CONTRIBUTION}.ins
+	${MAKE} --no-print-directory build
 
-.PHONY: test
+BUILDDIR = build
 
-test: unpack
-	for T in test*.tex; do echo "$$T"; pdflatex -interaction=batchmode $$T && echo "OK" || echo "Failure"; done
+build:
+	-mkdir ${BUILDDIR} 2>/dev/null || true
+	cp ${CONTRIBUTION}.ins README ${BUILDDIR}/
+	tex '\input ydocincl\relax\includefiles{${CONTRIBUTION}.dtx}{${BUILDDIR}/${CONTRIBUTION}.dtx}' && ${RM} ydocincl.log
+	cd ${BUILDDIR} && tex ${CONTRIBUTION}.ins
+	cd ${BUILDDIR} && ${LATEXMK} ${CONTRIBUTION}.dtx
+	cd ${BUILDDIR} && ctanify ${CONTRIBUTION}.dtx ${CONTRIBUTION}.ins ${CONTRIBUTION}.sty README ${CONTRIBUTION}.pdf
+	cd ${BUILDDIR} && cp ${CONTRIBUTION}.tar.gz ${CONTRIBUTION}.pdf ..
 
 clean:
-	-latexmk -C realboxes.dtx
-	-latexmk -C realboxes-de.tex
-	${RM} ${PACKEDFILES} *.zip *.log *.aux *.toc *.vrb *.nav *.pdf *.snm *.out *.fdb_latexmk *.glo *.gls *.hd *.sta *.stp *.cod
-	${RMDIR} tds
-
-install: unpack doc ${INSTALLDIR} ${DOCINSTALLDIR}
-	${CP} ${PACKEDFILES} ${INSTALLDIR}
-	${CP} ${DOCFILES} ${DOCINSTALLDIR}
-	texhash ${TEXMF}
-
-${INSTALLDIR}:
-	mkdir -p $@
-
-${DOCINSTALLDIR}:
-	mkdir -p $@
-
-.PHONY: build
-
-build: realboxes.dtx realboxes.ins README
-	rm -rf build/
-	mkdir build
-	perl ../dtx/dtx.pl realboxes.dtx build/realboxes.dtx
-	${CP} realboxes.ins README build/
-	cd build && yes | tex realboxes.ins
-	cd build && latexmk -pdf realboxes.dtx
-	cd build && pdfopt realboxes.pdf opt.pdf && mv opt.pdf realboxes.pdf
-	cd build && ctanify realboxes.dtx realboxes.ins realboxes.sty README realboxes.pdf
-	cd build && ${CP} realboxes.tar.gz /tmp
+	latexmk -C ${CONTRIBUTION}.dtx
+	@${RM} ${CONTRIBUTION}.cod ${CONTRIBUTION}.glo ${CONTRIBUTION}.gls ${CONTRIBUTION}.exa ${CONTRIBUTION}.log ${CONTRIBUTION}.aux
+	${RM} -r build ${FILE}
 
 
-###########################
-# CTAN Upload
-CTANUPLOAD=http://dante.ctan.org/upload.html
-BROWSER=firefox
+distclean:
+	latexmk -c ${CONTRIBUTION}.dtx
+	@${RM} ${CONTRIBUTION}.cod ${CONTRIBUTION}.glo ${CONTRIBUTION}.gls ${CONTRIBUTION}.exa ${CONTRIBUTION}.log ${CONTRIBUTION}.aux
+	${RM} -r build
 
-upload:
-	${BROWSER} ${CTANUPLOAD} &
+
+install: ${CONTRIBUTION}.pdf ${CONTRIBUTION}.sty
+	-@mkdir ${TEXMF}/tex/latex/${CONTRIBUTION}/ 2>/dev/null || true
+	-@mkdir ${TEXMF}/doc/latex/${CONTRIBUTION}/ 2>/dev/null || true
+	cp ${SRCFILES} ${TEXMF}/tex/latex/${CONTRIBUTION}/
+	cp ${DOCFILES} ${TEXMF}/doc/latex/${CONTRIBUTION}/
+	test -f ${TEXMF}/ls-R && texhash ${TEXMF}
+
+
+installsymlinks:
+	-@mkdir ${TEXMF}/tex/latex/${CONTRIBUTION}/ 2>/dev/null || true
+	-cd ${TEXMF}/tex/latex/${CONTRIBUTION}/ && ${RM} ${SRCFILES}
+	ln -s ${SRCFILES} ${TEXMF}/tex/latex/${CONTRIBUTION}/
+	test -f ${TEXMF}/ls-R && texhash ${TEXMF}
+
+
+uninstall:
+	${RM} ${TEXMF}/tex/latex/${CONTRIBUTION}/ ${TEXMF}/doc/latex/${CONTRIBUTION}/
+	test -f ${TEXMF}/ls-R && texhash ${TEXMF}
+
 
