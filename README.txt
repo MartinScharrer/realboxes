@@ -1,7 +1,7 @@
 LaTeX package 'realboxes'
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-Copyright (c) 2011-2016 by Martin Scharrer <martin@scharrer-online.de>
-WWW: http://latex.scharrer-online.de/
+Copyright (c) 2011-2022 by Martin Scharrer <martin.scharrer@web.de>
+
 
 This LaTeX package uses the authors other package 'collectbox' to define
 variants of common box related macros which read the content as real box and
